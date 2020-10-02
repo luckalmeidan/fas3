@@ -258,31 +258,6 @@ def objective_cooling(mach, m, e_recirc, H_cab_ft, Tcab, n_pax, Qrequired, alpha
     return abs(Qcooling - Qrequired)
 
 
-def calculating_cooling():
-    e_recirc = 1
-    n_pax = 200
-
-    Qrequired = 100
-    alpha = 1
-    m = 0.45
-    H_cab_ft = 8000
-    Tcab = 24 + 273
-    mach = 0.78
-    min_ventilation = n_pax * 0.55 * lbmin_2_kgs / 2
-
-    W, T, P, s, Qcooling, COP, COPP = simple_bootstrap_cycle(mach, m, e_recirc, H_cab_ft, Tcab, n_pax, Qrequired, alpha,
-                                                             print_results=False)
-
-    resfun = lambda m: objective_cooling(mach, m, e_recirc, H_cab_ft, Tcab, n_pax, Qrequired, alpha,
-                                         print_results=False)
-
-    bnds = [[min_ventilation, np.inf]]
-    sol = minimize(resfun, x0=np.array([.5]), method='trust-constr', bounds=bnds)
-    print(sol)
-    m = sol.x[0]
-
-    print('Mass required cooling:', m)
-
 
 def plot_cycle(s, T):
     # End calculation
@@ -307,8 +282,32 @@ def plot_cycle(s, T):
 
     plot.show()
 
+def test_calculating_cooling():
+    e_recirc = 1
+    n_pax = 200
 
-def simple_test_plot():
+    Qrequired = 100
+    alpha = 1
+    m = 0.45
+    H_cab_ft = 8000
+    Tcab = 24 + 273
+    mach = 0.78
+    min_ventilation = n_pax * 0.55 * lbmin_2_kgs / 2
+
+    W, T, P, s, Qcooling, COP, COPP = simple_bootstrap_cycle(mach, m, e_recirc, H_cab_ft, Tcab, n_pax, Qrequired, alpha,
+                                                             print_results=False)
+
+    resfun = lambda m: objective_cooling(mach, m, e_recirc, H_cab_ft, Tcab, n_pax, Qrequired, alpha,
+                                         print_results=False)
+
+    bnds = [[min_ventilation, np.inf]]
+    sol = minimize(resfun, x0=np.array([.5]), method='trust-constr', bounds=bnds)
+    print(sol)
+    m = sol.x[0]
+
+    print('Mass required cooling:', m)
+
+def test_simple_plot():
     e_recirc = 0.5
     n_pax = 200
 
@@ -325,7 +324,7 @@ def simple_test_plot():
     print(COP, COPP, Qcooling)
 
 
-def vary_mach():
+def test_vary_mach():
     alpha = 1
     m = 1.2
     H_cab_ft = 8000
@@ -351,7 +350,7 @@ def vary_mach():
 
 if __name__ == "__main__":
     #simple_test_plot()
-    calculating_cooling()
+    test_calculating_cooling()
     # vary_mach()
 
     # plot_cycle(s,T)
