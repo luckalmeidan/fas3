@@ -17,7 +17,7 @@ kW2btumin = 3412.142
 g = 9.81
 R = 287.05
 
-Cp = 1.004
+Cp = 1.005
 
 
 def atmosferaISA(H, deltaT):
